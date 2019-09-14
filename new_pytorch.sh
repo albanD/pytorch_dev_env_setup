@@ -101,15 +101,14 @@ else
     . ${ENV_PATH}/bin/activate
     if [ "${COMPAT_GCC}" == "1" ]; then
         # For numpy install
-        export CFLAGS='-std=c99'
+        export OPENBLAS=${INSTALL_HOME}/openblas/lib/libopenblas.so
     fi
     # Warning: numpy won't find OpenBLAS here
     pip install -r requirements.txt
-    pip install ninja
-    if [ "${COMPAT_GCC}" == "1" ]; then
-        # Because pytorch can't compile with it -std=c99
-        export CFLAGS=""
+    if [ "${PY_VERSION}" == "2.7" ]; then
+        pip install future
     fi
+    pip install ninja
     python setup.py develop
 
     deactivate
