@@ -5,7 +5,7 @@ set -e
 VERSIONS=("2.7" "3.5" "3.6")
 MODES=("release" "debug")
 
-INSTALL_HOME=/home/albandes/local/installs
+INSTALL_HOME=${HOME}/local/installs
 echo "Installing all pythons in ${INSTALL_HOME}"
 
 for VERSION in "${VERSIONS[@]}"; do

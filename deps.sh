@@ -2,7 +2,7 @@
 
 set -e
 
-INSTALL_HOME=/home/albandes/local/installs
+INSTALL_HOME=${HOME}/local/installs
 echo "Installing all the dependencies in ${INSTALL_HOME}"
 
 mkdir -p ${INSTALL_HOME}

@@ -2,8 +2,8 @@
 
 set -e
 
-PYTORCH_INSTALL_BASE=/home/albandes/local/pytorch
-INSTALL_HOME=/home/albandes/local/installs
+PYTORCH_INSTALL_BASE=${HOME}/local/pytorch
+INSTALL_HOME=${HOME}/local/installs
 
 
 # Default for cla
