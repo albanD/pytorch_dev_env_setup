@@ -75,6 +75,11 @@ INSTALL_PATH=${PYTORCH_INSTALL_BASE}/${PY_VERSION}_${MODE}_${TYPE}
 ENV_PATH=${PYTORCH_INSTALL_BASE}/${PY_VERSION}_${MODE}_${TYPE}_env
 PY_INSTALL_REPO=${INSTALL_HOME}/python${PY_VERSION}/${MODE}/install
 
+if [ -d ${INSTALL_PATH} ]; then
+  echo "Install path already exists, skipping ${INSTALL_PATH}"
+  exit 0
+fi
+
 ${PY_INSTALL_REPO}/bin/virtualenv -p ${PY_INSTALL_REPO}/bin/python${PY_VERSION} ${ENV_PATH}
 
 if [ "${USE_BINARY}" == "1" ]; then

@@ -16,7 +16,7 @@ for PY_VERSION in "${PY_VERSIONS[@]}"; do
                     continue
                 fi
             fi
-            ./new_pytorch.sh --version ${PY_VERSION} ${MODE} ${BUILD}
+            ./new_pytorch.sh --version ${PY_VERSION} ${MODE} ${BUILD} ${COMPAT_GCC}
         done
     done
 done
