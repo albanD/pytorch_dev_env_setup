@@ -82,6 +82,7 @@ fi
 
 ${PY_INSTALL_REPO}/bin/virtualenv -p ${PY_INSTALL_REPO}/bin/python${PY_VERSION} ${ENV_PATH}
 
+
 if [ "${USE_BINARY}" == "1" ]; then
     mkdir -p ${INSTALL_PATH}
     pushd ${INSTALL_PATH}
@@ -90,6 +91,8 @@ if [ "${USE_BINARY}" == "1" ]; then
     touch test.py
 
     . ${ENV_PATH}/bin/activate
+    pip install ipython
+    pip install ghstack
     pip install numpy
     pip install --pre torch torchvision -f https://download.pytorch.org/whl/nightly/${CUDA_VERSION}/torch_nightly.html
     deactivate
@@ -98,12 +101,18 @@ if [ "${USE_BINARY}" == "1" ]; then
 else
     git clone git@github.com:pytorch/pytorch.git ${INSTALL_PATH}
     pushd ${INSTALL_PATH}
+    git remote add alban git@github.com:albanD/pytorch.git
     git submodule update --init --recursive
 
     echo ". ${ENV_PATH}/bin/activate" > .envrc
     direnv allow
 
     . ${ENV_PATH}/bin/activate
+    pip install ipython
+    pip install ghstack
+    pip install hypothesis
+    pip install Pillow
+
     if [ "${COMPAT_GCC}" == "1" ]; then
         # For numpy install
         export OPENBLAS=${INSTALL_HOME}/openblas/lib/libopenblas.so
