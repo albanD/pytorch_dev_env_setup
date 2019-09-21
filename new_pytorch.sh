@@ -62,6 +62,8 @@ if [ ! "$PARAMS" == "" ]; then
     false
 fi
 
+PILLOW_FLAG=""
+
 MODE="release"
 if [ "${DO_DEBUG}" == "1" ]; then
     MODE="debug"
@@ -116,12 +118,13 @@ else
     pip install ipython
     pip install ghstack
     pip install hypothesis
-    pip install Pillow
 
     if [ "${COMPAT_GCC}" == "1" ]; then
         # For numpy install
         export OPENBLAS=${INSTALL_HOME}/openblas/lib/libopenblas.so
+        PILLOW_FLAG='--global-option="build_ext" --global-option="--disable-jpeg"'
     fi
+    pip install Pillow ${PILLOW_FLAG}
     # Warning: numpy won't find OpenBLAS here
     pip install -r requirements.txt
     if [ "${PY_VERSION}" == "2.7" ]; then
