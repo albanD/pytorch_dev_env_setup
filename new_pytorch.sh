@@ -12,6 +12,7 @@ USE_BINARY="0"
 COMPAT_GCC="0" # Use this if gcc < 5.0
 PY_VERSION="3.6"
 CUDA_VERSION="cpu"
+PREFIX=""
 
 PARAMS=""
 while (( "$#" )); do
@@ -30,6 +31,10 @@ while (( "$#" )); do
       ;;
     -v|--version)
       PY_VERSION=$2
+      shift 2
+      ;;
+    -p|--prefix)
+      PREFIX=$2
       shift 2
       ;;
     -c|--cuda)
@@ -71,8 +76,8 @@ if [ "${CUDA_VERSION}" == "cpu" ]; then
     export USE_CUDA=0
 fi
 
-INSTALL_PATH=${PYTORCH_INSTALL_BASE}/${PY_VERSION}_${MODE}_${TYPE}
-ENV_PATH=${PYTORCH_INSTALL_BASE}/${PY_VERSION}_${MODE}_${TYPE}_env
+INSTALL_PATH=${PYTORCH_INSTALL_BASE}/${PREFIX}${PY_VERSION}_${MODE}_${TYPE}
+ENV_PATH=${PYTORCH_INSTALL_BASE}/${PREFIX}${PY_VERSION}_${MODE}_${TYPE}_env
 PY_INSTALL_REPO=${INSTALL_HOME}/python${PY_VERSION}/${MODE}/install
 
 if [ -d ${INSTALL_PATH} ]; then
