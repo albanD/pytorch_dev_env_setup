@@ -111,4 +111,29 @@ then
     echo "eval \"\$(direnv hook bash)\"" >> ~/.bashrc
 fi
 
+
+SQLITE_INSTALL_PATH=${INSTALL_HOME}/sqlite
+if [ ! -d ${SQLITE_INSTALL_PATH} ]
+then
+    SQLITE_TMP_INSTALL_PATH=${INSTALL_HOME}/sqlite_tmp
+    wget https://www.sqlite.org/2019/sqlite-autoconf-3290000.tar.gz
+    tar zxvf sqlite-autoconf-3290000.tar.gz
+    rm sqlite-autoconf-3290000.tar.gz
+    mv sqlite-autoconf-3290000 ${SQLITE_TMP_INSTALL_PATH}
+
+    pushd ${SQLITE_TMP_INSTALL_PATH}
+    ./configure --prefix=${SQLITE_INSTALL_PATH}
+    make
+    make install
+    popd
+    rm -rf ${SQLITE_TMP_INSTALL_PATH}
+
+
+
+    echo ""
+    echo "# sqlite detection update (python will find the lib relatively from sqlite3.h" >> ~/.bashrc
+    echo "export CPPFLAGS=-I/home/albandes/local/installs/sqlite/include" >> ~/.bashrc
+fi
+
+popd
 echo 'All done, you probably want to "source ~/.bashrc" now'
