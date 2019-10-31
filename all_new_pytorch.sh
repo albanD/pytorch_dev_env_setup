@@ -2,10 +2,9 @@
 
 set -e
 
-PY_VERSIONS=("2.7" "3.5" "3.6")
+PY_VERSIONS=("2.7" "3.5" "3.6" "3.7")
 MODES=("" "--debug")
 BUILDS=("" "--binary")
-COMPAT_GCC="--old-gcc" # Or empty string
 
 for PY_VERSION in "${PY_VERSIONS[@]}"; do
     for MODE in "${MODES[@]}"; do
@@ -16,7 +15,7 @@ for PY_VERSION in "${PY_VERSIONS[@]}"; do
                     continue
                 fi
             fi
-            ./new_pytorch.sh --version ${PY_VERSION} ${MODE} ${BUILD} ${COMPAT_GCC}
+            ./new_pytorch.sh --version ${PY_VERSION} ${MODE} ${BUILD}
         done
     done
 done

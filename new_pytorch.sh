@@ -9,7 +9,6 @@ INSTALL_HOME=${HOME}/local/installs
 # Default for cla
 DO_DEBUG="0"
 USE_BINARY="0"
-COMPAT_GCC="0" # Use this if gcc < 5.0
 PY_VERSION="3.6"
 CUDA_VERSION="cpu"
 PREFIX=""
@@ -23,10 +22,6 @@ while (( "$#" )); do
       ;;
     --binary)
       USE_BINARY="1"
-      shift 1
-      ;;
-    --old-gcc)
-      COMPAT_GCC="1"
       shift 1
       ;;
     -v|--version)
@@ -118,13 +113,7 @@ else
     pip install ipython
     pip install ghstack
     pip install hypothesis
-
-    if [ "${COMPAT_GCC}" == "1" ]; then
-        # For numpy install
-        export OPENBLAS=${INSTALL_HOME}/openblas/lib/libopenblas.so
-        PILLOW_FLAG='--global-option="build_ext" --global-option="--disable-jpeg"'
-    fi
-    pip install Pillow ${PILLOW_FLAG}
+    pip install Pillow
     # Warning: numpy won't find OpenBLAS here
     pip install -r requirements.txt
     if [ "${PY_VERSION}" == "2.7" ]; then
