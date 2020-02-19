@@ -178,13 +178,13 @@ then
     echo "${CCACHE_INSTALL_PATH}/bin/cc" >> ${DISTCC_ETC_INSTALL_PATH}/distcc/DISTCC_CMDLIST
     echo "${CCACHE_INSTALL_PATH}/bin/c++" >> ${DISTCC_ETC_INSTALL_PATH}/distcc/DISTCC_CMDLIST
 
-    echo "export DISTCC_CMDLIST=${DISTCC_ETC_INSTALL_PATH}/DISTCC_CMDLIST" >> ${DISTCC_ETC_INSTALL_PATH}/default/distcc
-    echo "export CCACHE_DIR=/home/albandes/.ccache" >> ${DISTCC_ETC_INSTALL_PATH}/default/distcc
-    echo "export PATH=${CCACHE_INSTALL_PATH}:\$PATH" >> ${DISTCC_ETC_INSTALL_PATH}/default/distcc
-
     echo ""
     echo "# distcc path update (had to be first in the path):" >> ~/.bashrc
     echo "export PATH=${DISTCC_INSTALL_PATH}/bin:\${PATH}" >> ~/.bashrc
+    echo "export DISTCC_CMDLIST=${DISTCC_ETC_INSTALL_PATH}/distcc/DISTCC_CMDLIST" >> ~/.bashrc
+    echo "export DISTCC_HOSTS='localhost/24 devvm3046.frc1.facebook.com/24'" >> ~/.bashrc
+    echo "alias with-distcc='CCACHE_PREFIX=distcc'" >> ~/.bashrc
+    echo "alias start-distcc='distccd --daemon --port 3632 --listen :: --allow 2401:db00:2111:a06d:face:0:6e:0'" >> ~/.bashrc
     PATH=${DISTCC_INSTALL_PATH}/bin:${PATH}
 fi
 
