@@ -80,7 +80,9 @@ then
 
     pushd ${AUTOMAKE_TMP_INSTALL_PATH}
     ./configure --prefix=${AUTOMAKE_INSTALL_PATH}
-    make install-binSCRIPTS
+    # Weird thing with perl I don't want to debug
+    sed -i 's/\/doc\/help2man --output=/\/doc\/help2man --no-discard-stderr --output=/' ${AUTOMAKE_TMP_INSTALL_PATH}/Makefile
+    make install
     popd
     rm -rf ${AUTOMAKE_TMP_INSTALL_PATH}
 
