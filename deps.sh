@@ -158,5 +158,24 @@ then
     echo "export CPPFLAGS=-I/home/albandes/local/installs/sqlite/include" >> ~/.bashrc
 fi
 
+DISTCC_INSTALL_PATH=${INSTALL_HOME}/distcc
+if [ ! -d ${DISTCC_INSTALL_PATH} ]
+then
+    DISTCC_TMP_INSTALL_PATH=${INSTALL_HOME}/distcc_tmp
+    git clone https://github.com/distcc/distcc ${DISTCC_TMP_INSTALL_PATH}
+    pushd ${DISTCC_TMP_INSTALL_PATH}
+    git checkout v3.3.3
+    ./autogen.sh
+    ./configure --sysconfdir=${DISTCC_INSTALL_PATH}_etc --prefix=${DISTCC_INSTALL_PATH} --disable-pump-mode
+    make install
+    popd
+    rm -rf ${DISTCC_TMP_INSTALL_PATH}
+
+    echo ""
+    echo "# distcc path update (had to be first in the path):" >> ~/.bashrc
+    echo "export PATH=${DISTCC_INSTALL_PATH}/bin:\${PATH}" >> ~/.bashrc
+    PATH=${DISTCC_INSTALL_PATH}/bin:${PATH}
+fi
+
 popd
 echo 'All done, you probably want to "source ~/.bashrc" now'
