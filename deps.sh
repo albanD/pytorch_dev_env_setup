@@ -69,6 +69,27 @@ then
     PATH=${PATH}:${AUTOCONF_INSTALL_PATH}/bin
 fi
 
+AUTOMAKE_INSTALL_PATH=${INSTALL_HOME}/automake
+if [ ! -d ${AUTOMAKE_INSTALL_PATH} ]
+then
+    AUTOMAKE_TMP_INSTALL_PATH=${INSTALL_HOME}/automake_tmp
+    wget http://ftp.gnu.org/gnu/automake/automake-1.16.tar.gz
+    tar zxvf automake-1.16.tar.gz
+    rm automake-1.16.tar.gz
+    mv automake-1.16 ${AUTOMAKE_TMP_INSTALL_PATH}
+
+    pushd ${AUTOMAKE_TMP_INSTALL_PATH}
+    ./configure --prefix=${AUTOMAKE_INSTALL_PATH}
+    make install-binSCRIPTS
+    popd
+    rm -rf ${AUTOMAKE_TMP_INSTALL_PATH}
+
+    echo ""
+    echo "# automake path update:" >> ~/.bashrc
+    echo "export PATH=\${PATH}:${AUTOMAKE_INSTALL_PATH}/bin" >> ~/.bashrc
+    PATH=${PATH}:${AUTOMAKE_INSTALL_PATH}/bin
+fi
+
 CCACHE_INSTALL_PATH=${INSTALL_HOME}/ccache
 if [ ! -d ${CCACHE_INSTALL_PATH} ]
 then
