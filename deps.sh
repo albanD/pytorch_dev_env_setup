@@ -151,8 +151,6 @@ then
     popd
     rm -rf ${SQLITE_TMP_INSTALL_PATH}
 
-
-
     echo ""
     echo "# sqlite detection update (python will find the lib relatively from sqlite3.h" >> ~/.bashrc
     echo "export CPPFLAGS=-I/home/albandes/local/installs/sqlite/include" >> ~/.bashrc
@@ -162,14 +160,27 @@ DISTCC_INSTALL_PATH=${INSTALL_HOME}/distcc
 if [ ! -d ${DISTCC_INSTALL_PATH} ]
 then
     DISTCC_TMP_INSTALL_PATH=${INSTALL_HOME}/distcc_tmp
+    DISTCC_ETC_INSTALL_PATH=${DISTCC_INSTALL_PATH}_etc
     git clone https://github.com/distcc/distcc ${DISTCC_TMP_INSTALL_PATH}
     pushd ${DISTCC_TMP_INSTALL_PATH}
     git checkout v3.3.3
     ./autogen.sh
-    ./configure --sysconfdir=${DISTCC_INSTALL_PATH}_etc --prefix=${DISTCC_INSTALL_PATH} --disable-pump-mode --enable-rfc2553
+    ./configure --sysconfdir=${DISTCC_ETC_INSTALL_PATH} --prefix=${DISTCC_INSTALL_PATH} --disable-pump-mode --enable-rfc2553
     make install
     popd
     rm -rf ${DISTCC_TMP_INSTALL_PATH}
+
+    ln -s ${DISTCC_INSTALL_PATH}/bin ${DISTCC_INSTALL_PATH}/lib
+
+    echo "${CCACHE_INSTALL_PATH}/bin/gcc" >> ${DISTCC_ETC_INSTALL_PATH}/distcc/DISTCC_CMDLIST
+    echo "${CCACHE_INSTALL_PATH}/bin/g++" >> ${DISTCC_ETC_INSTALL_PATH}/distcc/DISTCC_CMDLIST
+    echo "${CCACHE_INSTALL_PATH}/bin/nvcc" >> ${DISTCC_ETC_INSTALL_PATH}/distcc/DISTCC_CMDLIST
+    echo "${CCACHE_INSTALL_PATH}/bin/cc" >> ${DISTCC_ETC_INSTALL_PATH}/distcc/DISTCC_CMDLIST
+    echo "${CCACHE_INSTALL_PATH}/bin/c++" >> ${DISTCC_ETC_INSTALL_PATH}/distcc/DISTCC_CMDLIST
+
+    echo "export DISTCC_CMDLIST=${DISTCC_ETC_INSTALL_PATH}/DISTCC_CMDLIST" >> ${DISTCC_ETC_INSTALL_PATH}/default/distcc
+    echo "export CCACHE_DIR=/home/albandes/.ccache" >> ${DISTCC_ETC_INSTALL_PATH}/default/distcc
+    echo "export PATH=${CCACHE_INSTALL_PATH}:\$PATH" >> ${DISTCC_ETC_INSTALL_PATH}/default/distcc
 
     echo ""
     echo "# distcc path update (had to be first in the path):" >> ~/.bashrc
