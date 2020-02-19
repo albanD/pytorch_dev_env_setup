@@ -166,7 +166,7 @@ then
     pushd ${DISTCC_TMP_INSTALL_PATH}
     git checkout v3.3.3
     ./autogen.sh
-    ./configure --sysconfdir=${DISTCC_INSTALL_PATH}_etc --prefix=${DISTCC_INSTALL_PATH} --disable-pump-mode
+    ./configure --sysconfdir=${DISTCC_INSTALL_PATH}_etc --prefix=${DISTCC_INSTALL_PATH} --disable-pump-mode --enable-rfc2553
     make install
     popd
     rm -rf ${DISTCC_TMP_INSTALL_PATH}
