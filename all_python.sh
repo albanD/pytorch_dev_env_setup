@@ -2,7 +2,7 @@
 
 set -e
 
-VERSIONS=("2.7" "3.5" "3.6" "3.7" "3.8")
+VERSIONS=("3.6" "3.7" "3.8" "3.9")
 MODES=("release" "debug")
 
 INSTALL_HOME=${HOME}/local/installs

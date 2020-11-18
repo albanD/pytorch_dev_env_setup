@@ -2,7 +2,7 @@
 
 set -e
 
-PY_VERSIONS=("2.7" "3.5" "3.6" "3.7")
+PY_VERSIONS=("3.6" "3.7" "3.8" "3.9")
 MODES=("" "--debug")
 BUILDS=("" "--binary")
 
