@@ -4,3 +4,4 @@ export HOME_VAL="/scratch/albandes"
 
 ./all_python.sh
 
+./new_pytorch.sh
