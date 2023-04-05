@@ -6,10 +6,8 @@ if [ -z "$HOME_VAL" ]; then
     HOME_VAL="$HOME"
 fi
 
-# VERSIONS=("3.8" "3.9" "3.10" "3.11")
-VERSIONS=("3.10")
-# MODES=("release" "debug" "shared")
-MODES=("debug")
+VERSIONS=("3.8" "3.9" "3.10" "3.11")
+MODES=("release" "debug" "shared")
 
 INSTALL_HOME=${HOME_VAL}/local/installs
 echo "Installing all pythons in ${INSTALL_HOME}"

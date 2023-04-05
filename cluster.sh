@@ -1,6 +1,7 @@
 export HOME_VAL="/scratch/albandes"
 
 ./deps.sh
+. ~/.bashrc
 
 ./all_python.sh
 
