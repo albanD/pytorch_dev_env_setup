@@ -2,7 +2,11 @@
 
 set -e
 
-INSTALL_HOME=${HOME}/local/installs
+if [ -z "$HOME_VAL" ]; then
+    HOME_VAL="$HOME"
+fi
+
+INSTALL_HOME=${HOME_VAL}/local/installs
 echo "Installing all the dependencies in ${INSTALL_HOME}"
 
 mkdir -p ${INSTALL_HOME}

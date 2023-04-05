@@ -1,3 +1,5 @@
-export HOME="/scratch/albandes"
+export HOME_VAL="/scratch/albandes"
 
 ./deps.sh
+
+

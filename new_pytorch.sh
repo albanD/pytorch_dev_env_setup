@@ -3,8 +3,12 @@
 set -e
 set -o xtrace
 
-PYTORCH_INSTALL_BASE=${HOME}/local/pytorch
-INSTALL_HOME=${HOME}/local/installs
+if [ -z "$HOME_VAL" ]; then
+    HOME_VAL="$HOME"
+fi
+
+PYTORCH_INSTALL_BASE=${HOME_VAL}/local/pytorch
+INSTALL_HOME=${HOME_VAL}/local/installs
 
 
 # Default for cla
