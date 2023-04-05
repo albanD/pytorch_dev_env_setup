@@ -30,22 +30,22 @@ pushd ${INSTALL_HOME}
 #     PATH=${PATH}:${CMAKE_INSTALL_PATH}/bin
 # fi
 
-OPENBLAS_INSTALL_PATH=${INSTALL_HOME}/openblas
-if [ ! -d ${OPENBLAS_INSTALL_PATH} ]
-then
-    OPENBLAS_TMP_INSTALL_PATH=${INSTALL_HOME}/openblas_tmp
-    git clone https://github.com/xianyi/OpenBLAS ${OPENBLAS_TMP_INSTALL_PATH}
-    pushd ${OPENBLAS_TMP_INSTALL_PATH}
-    USE_OPENMP=1 make -j$(nproc)
-    make PREFIX=${OPENBLAS_INSTALL_PATH} install
-    popd
-    rm -rf ${OPENBLAS_TMP_INSTALL_PATH}
+# OPENBLAS_INSTALL_PATH=${INSTALL_HOME}/openblas
+# if [ ! -d ${OPENBLAS_INSTALL_PATH} ]
+# then
+#     OPENBLAS_TMP_INSTALL_PATH=${INSTALL_HOME}/openblas_tmp
+#     git clone https://github.com/xianyi/OpenBLAS ${OPENBLAS_TMP_INSTALL_PATH}
+#     pushd ${OPENBLAS_TMP_INSTALL_PATH}
+#     USE_OPENMP=1 make -j$(nproc)
+#     make PREFIX=${OPENBLAS_INSTALL_PATH} install
+#     popd
+#     rm -rf ${OPENBLAS_TMP_INSTALL_PATH}
 
-    echo ""
-    echo "# OpenBLAS library path update:" >> ~/.bashrc
-    echo "export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH}:${OPENBLAS_INSTALL_PATH}/lib" >> ~/.bashrc
-    LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${OPENBLAS_INSTALL_PATH}/lib
-fi
+#     echo ""
+#     echo "# OpenBLAS library path update:" >> ~/.bashrc
+#     echo "export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH}:${OPENBLAS_INSTALL_PATH}/lib" >> ~/.bashrc
+#     LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${OPENBLAS_INSTALL_PATH}/lib
+# fi
 
 # AUTOCONF_INSTALL_PATH=${INSTALL_HOME}/autoconf
 # if [ ! -d ${AUTOCONF_INSTALL_PATH} ]
@@ -118,21 +118,21 @@ fi
 #     PATH=${CCACHE_INSTALL_PATH}/bin:${PATH}
 # fi
 
-# DIRENV_INSTALL_PATH=${INSTALL_HOME}/direnv
-# if [ ! -d ${DIRENV_INSTALL_PATH} ]
-# then
-#     mkdir -p ${DIRENV_INSTALL_PATH}
-#     pushd ${DIRENV_INSTALL_PATH}
-#     wget https://github.com/direnv/direnv/releases/download/v2.31.0/direnv.linux-amd64
-#     mv direnv.linux-amd64 direnv
-#     chmod +x direnv
-#     popd
+DIRENV_INSTALL_PATH=${INSTALL_HOME}/direnv
+if [ ! -d ${DIRENV_INSTALL_PATH} ]
+then
+    mkdir -p ${DIRENV_INSTALL_PATH}
+    pushd ${DIRENV_INSTALL_PATH}
+    wget https://github.com/direnv/direnv/releases/download/v2.31.0/direnv.linux-amd64
+    mv direnv.linux-amd64 direnv
+    chmod +x direnv
+    popd
 
-#     echo ""
-#     echo "# direnv path update and hooking in the terminal" >> ~/.bashrc
-#     echo "export PATH=\${PATH}:${DIRENV_INSTALL_PATH}" >> ~/.bashrc
-#     echo "eval \"\$(direnv hook bash)\"" >> ~/.bashrc
-# fi
+    echo ""
+    echo "# direnv path update and hooking in the terminal" >> ~/.bashrc
+    echo "export PATH=\${PATH}:${DIRENV_INSTALL_PATH}" >> ~/.bashrc
+    echo "eval \"\$(direnv hook bash)\"" >> ~/.bashrc
+fi
 
 
 # SQLITE_INSTALL_PATH=${INSTALL_HOME}/sqlite
