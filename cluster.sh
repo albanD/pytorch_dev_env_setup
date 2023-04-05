@@ -1,4 +1,4 @@
-export HOME_VAL="/scratch/albandes"
+export HOME_VAL="/scratch/${USER}"
 
 ./deps.sh
 . ~/.bashrc

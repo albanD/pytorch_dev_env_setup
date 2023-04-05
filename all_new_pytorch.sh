@@ -2,9 +2,12 @@
 
 set -e
 
-PY_VERSIONS=("3.8" "3.9" "3.10" "3.11")
-MODES=("" "--debug" "--shared")
-BUILDS=("" "--binary")
+# PY_VERSIONS=("3.8" "3.9" "3.10" "3.11")
+PY_VERSIONS=("3.11")
+# MODES=("" "--debug" "--shared")
+MODES=("--debug")
+# BUILDS=("" "--binary")
+BUILDS=("")
 
 for PY_VERSION in "${PY_VERSIONS[@]}"; do
     for MODE in "${MODES[@]}"; do
