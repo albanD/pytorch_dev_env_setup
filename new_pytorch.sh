@@ -162,11 +162,11 @@ else
     }
 
     # Install domains!
-    install_lib "vision"
-    install_lib "audio"
-    install_lib "data"
-    install_lib "text"
-    clone_lib "benchmark"
+    # install_lib "vision"
+    # install_lib "audio"
+    # install_lib "data"
+    # install_lib "text"
+    # clone_lib "benchmark"
 
     deactivate
 
