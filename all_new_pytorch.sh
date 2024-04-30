@@ -2,8 +2,10 @@
 
 set -e
 
-PY_VERSIONS=("3.8" "3.9" "3.10" "3.11")
-MODES=("" "--debug" "--shared")
+PY_VERSIONS=("3.8" "3.9" "3.10" "3.11" "3.12" "3.13.0a6")
+# package/deploy is dead I guess
+# MODES=("" "--debug" "--shared")
+MODES=("" "--debug")
 BUILDS=("" "--binary")
 
 for PY_VERSION in "${PY_VERSIONS[@]}"; do

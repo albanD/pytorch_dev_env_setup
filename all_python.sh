@@ -2,8 +2,10 @@
 
 set -e
 
-VERSIONS=("3.8" "3.9" "3.10" "3.11")
-MODES=("release" "debug" "shared")
+VERSIONS=("3.8" "3.9" "3.10" "3.11" "3.12" "3.13.0a6")
+# package/deploy is dead I guess
+# MODES=("release" "debug" "shared")
+MODES=("release" "debug")
 
 INSTALL_HOME=${HOME}/local/installs
 echo "Installing all pythons in ${INSTALL_HOME}"
@@ -32,12 +34,12 @@ for VERSION in "${VERSIONS[@]}"; do
 
         git clone git@github.com:python/cpython.git ${CURR_SOURCE_REPO}
         pushd ${CURR_SOURCE_REPO}
-        git checkout ${VERSION}
+        git checkout v${VERSION}
         ./configure --prefix=${CURR_INSTALL_REPO} --with-ensurepip=install ${SHARED_OPT} ${CONFIG_OPT}
         make -j$(nproc)
         make install
         popd
 
-        LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${CURR_INSTALL_REPO}/lib ${CURR_INSTALL_REPO}/bin/pip${VERSION} install virtualenv
+        LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${CURR_INSTALL_REPO}/lib ${CURR_INSTALL_REPO}/bin/pip3 install virtualenv
     done
 done
