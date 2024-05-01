@@ -96,7 +96,7 @@ fi
 
 echo $LD_LIBRARY_PATH
 
-${PY_INSTALL_REPO}/bin/virtualenv -p ${PY_INSTALL_REPO}/bin/python${PY_VERSION} ${ENV_PATH}
+${PY_INSTALL_REPO}/bin/virtualenv -p ${PY_INSTALL_REPO}/bin/python3 ${ENV_PATH}
 
 
 if [ "${USE_BINARY}" == "1" ]; then
@@ -134,7 +134,13 @@ else
         pip install future
     fi
     pip install ninja
-    python setup.py develop
+
+    # Preserve user BUILD_CONFIG if any
+    if [ -z "$BUILD_CONFIG" ]; then
+        python setup.py develop
+    else
+        BUILD_CONFIG="$BUILD_CONFIG" python setup.py develop
+    fi
 
     # ASAN command if you're advanturous
     # ASAN_OPTIONS="detect_leaks=0" CFLAGS="-fsanitize=address -fsanitize=undefined -fno-sanitize-recover=all -fsanitize-address-use-after-scope" USE_ASAN=1 USE_DISTRIBUTED=0 USE_MKLDNN=0 USE_CUDA=0 BUILD_TEST=0 USE_FBGEMM=0 USE_NNPACK=0 USE_QNNPACK=0 USE_XNNPACK=0 USE_COLORIZE_OUTPUT=0 python setup.py develop
