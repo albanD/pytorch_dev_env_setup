@@ -2,28 +2,47 @@
 
 set -e
 
-PY_VERSIONS=("3.8" "3.9" "3.10" "3.11" "3.12" "3.13.0a6")
+# PY_VERSIONS=("3.8" "3.9" "3.10" "3.11" "3.12" "3.13")
+PY_VERSIONS=("3.13")
 # package/deploy is dead I guess
 # MODES=("" "--debug" "--shared")
-MODES=("" "--debug")
-BUILDS=("" "--binary")
+# MODES=("" "--debug")
+# BUILDS=("" "--binary")
+GILS=("" "--no-gil")
+MODES=("")
+BUILDS=("")
 
 for PY_VERSION in "${PY_VERSIONS[@]}"; do
     for MODE in "${MODES[@]}"; do
         for BUILD in "${BUILDS[@]}"; do
-            if [ "${MODE}" == "--debug" ]; then
-                if [ "${BUILD}" == "--binary" ]; then
-                    # No binary exists for debug pytorch
-                    continue
+            for GIL in "${GILS[@]}"; do
+                if [ "${MODE}" == "--debug" ]; then
+                    if [ "${BUILD}" == "--binary" ]; then
+                        # No binary exists for debug pytorch
+                        continue
+                    fi
+                else
+                    if [ "${GIL}" == "--no-gil" ]; then
+                        # nogil build is debug only
+                        continue
+                    fi
                 fi
-            fi
-            if [ "${MODE}" == "--shared" ]; then
-                if [ "${BUILD}" == "--binary" ]; then
-                    # Only do debug shared for now
-                    continue
+                if [ "${MODE}" == "--shared" ]; then
+                    if [ "${BUILD}" == "--binary" ]; then
+                        # Only do debug shared for now
+                        continue
+                    fi
                 fi
-            fi
-            ./new_pytorch.sh --version ${PY_VERSION} ${MODE} ${BUILD}
+
+                if [ "${GIL}" == "--no-gil" ]; then
+                    if [[ ${PY_VERSION} != 3.13* ]]; then
+                        continue
+                    fi
+                fi
+
+                echo "Running " ${PY_VERSION} ${MODE} ${BUILD} ${GIL}
+                ./new_pytorch.sh --version ${PY_VERSION} ${MODE} ${BUILD} ${GIL}
+            done
         done
     done
 done

@@ -14,6 +14,7 @@ USE_SHARED="0"
 PY_VERSION="3.6"
 CUDA_VERSION="cpu"
 PREFIX=""
+GIL=""
 
 PARAMS=""
 while (( "$#" )); do
@@ -41,6 +42,10 @@ while (( "$#" )); do
     -c|--cuda)
       CUDA_VERSION=$2
       shift 2
+      ;;
+    --no-gil)
+      GIL="--no-gil"
+      shift 1
       ;;
     --) # end argument parsing
       shift
@@ -71,6 +76,9 @@ if [ "${DO_DEBUG}" == "1" ]; then
 fi
 if [ "${USE_SHARED}" == "1" ]; then
     MODE="shared"
+fi
+if [ "${GIL}" == "--no-gil" ]; then
+    MODE="nogil"
 fi
 
 TYPE="source"
@@ -127,7 +135,7 @@ else
     pip install ipython
     # pip install ghstack
     pip install hypothesis
-    pip install Pillow
+    # pip install Pillow
     # Warning: numpy won't find OpenBLAS here
     pip install -r requirements.txt
     if [ "${PY_VERSION}" == "2.7" ]; then

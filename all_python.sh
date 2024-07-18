@@ -2,10 +2,10 @@
 
 set -e
 
-VERSIONS=("3.8" "3.9" "3.10" "3.11" "3.12" "3.13.0a6")
+VERSIONS=("3.13")
 # package/deploy is dead I guess
-# MODES=("release" "debug" "shared")
-MODES=("release" "debug")
+# MODES=("release" "debug" "shared" "nogil")
+MODES=("release" "nogil")
 
 INSTALL_HOME=${HOME}/local/installs
 echo "Installing all pythons in ${INSTALL_HOME}"
@@ -15,6 +15,9 @@ for VERSION in "${VERSIONS[@]}"; do
         if [ "${MODE}" = "release" ]; then
             # CONFIG_OPT="--enable-optimizations"
             CONFIG_OPT=""
+        elif [ "${MODE}" = "nogil" ]; then
+            # nofil is always a debug build is always debug build!
+            CONFIG_OPT="--disable-gil --with-pydebug"
         else
             # Shared is always debug build!
             CONFIG_OPT="--with-pydebug"
@@ -24,6 +27,12 @@ for VERSION in "${VERSIONS[@]}"; do
             SHARED_OPT="--enable-shared"
         else
             SHARED_OPT=""
+        fi
+
+        if [ "${MODE}" = "nogil" ]; then
+            if [[ ${VERSION} != 3.13* ]]; then
+                continue
+            fi
         fi
 
         CURR_INSTALL_REPO=${INSTALL_HOME}/python${VERSION}/${MODE}/install
