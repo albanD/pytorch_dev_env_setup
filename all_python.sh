@@ -43,7 +43,8 @@ for VERSION in "${VERSIONS[@]}"; do
 
         git clone git@github.com:python/cpython.git ${CURR_SOURCE_REPO}
         pushd ${CURR_SOURCE_REPO}
-        git checkout v${VERSION}
+        # git checkout v${VERSION}
+        git checkout ${VERSION}
         ./configure --prefix=${CURR_INSTALL_REPO} --with-ensurepip=install ${SHARED_OPT} ${CONFIG_OPT}
         make -j$(nproc)
         make install
