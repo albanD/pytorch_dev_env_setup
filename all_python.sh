@@ -2,10 +2,10 @@
 
 set -e
 
-VERSIONS=("3.13")
+VERSIONS=("3.14")
 # package/deploy is dead I guess
 # MODES=("release" "debug" "shared" "nogil")
-MODES=("release" "nogil")
+MODES=("release" "debug" "nogil")
 
 INSTALL_HOME=${HOME}/local/installs
 echo "Installing all pythons in ${INSTALL_HOME}"
@@ -16,7 +16,7 @@ for VERSION in "${VERSIONS[@]}"; do
             # CONFIG_OPT="--enable-optimizations"
             CONFIG_OPT=""
         elif [ "${MODE}" = "nogil" ]; then
-            # nofil is always a debug build is always debug build!
+            # nogil is always debug build!
             CONFIG_OPT="--disable-gil --with-pydebug"
         else
             # Shared is always debug build!
@@ -30,7 +30,7 @@ for VERSION in "${VERSIONS[@]}"; do
         fi
 
         if [ "${MODE}" = "nogil" ]; then
-            if [[ ${VERSION} != 3.13* ]]; then
+            if [[ ! ${VERSION} =~ ^(3\.13|3\.14).* ]]; then
                 continue
             fi
         fi
@@ -50,6 +50,6 @@ for VERSION in "${VERSIONS[@]}"; do
         make install
         popd
 
-        LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${CURR_INSTALL_REPO}/lib ${CURR_INSTALL_REPO}/bin/pip3 install virtualenv
+        LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${CURR_INSTALL_REPO}/lib ${CURR_INSTALL_REPO}/bin/pip3 install virtualenv uv
     done
 done

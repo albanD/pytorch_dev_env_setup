@@ -3,14 +3,14 @@
 set -e
 
 # PY_VERSIONS=("3.8" "3.9" "3.10" "3.11" "3.12" "3.13")
-PY_VERSIONS=("3.13")
+PY_VERSIONS=("3.14")
 # package/deploy is dead I guess
 # MODES=("" "--debug" "--shared")
 # MODES=("" "--debug")
 # BUILDS=("" "--binary")
 GILS=("" "--no-gil")
-MODES=("")
-BUILDS=("")
+MODES=("" "--debug")
+BUILDS=("" "--binary")
 
 for PY_VERSION in "${PY_VERSIONS[@]}"; do
     for MODE in "${MODES[@]}"; do
@@ -35,7 +35,7 @@ for PY_VERSION in "${PY_VERSIONS[@]}"; do
                 fi
 
                 if [ "${GIL}" == "--no-gil" ]; then
-                    if [[ ${PY_VERSION} != 3.13* ]]; then
+                    if [[ ! ${PY_VERSION} =~ ^(3\.13|3\.14).* ]]; then
                         continue
                     fi
                 fi

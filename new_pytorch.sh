@@ -115,10 +115,10 @@ if [ "${USE_BINARY}" == "1" ]; then
     touch test.py
 
     . ${ENV_PATH}/bin/activate
-    pip install ipython
-    # pip install ghstack
-    pip install numpy
-    pip install --pre torch torchvision torchaudio torchtext -f https://download.pytorch.org/whl/nightly/${CUDA_VERSION}/torch_nightly.html
+    uv pip install ipython
+    # uv pip install ghstack
+    uv pip install numpy
+    uv pip install --pre torch -f https://download.pytorch.org/whl/nightly/${CUDA_VERSION}
     deactivate
     popd
 
@@ -132,16 +132,16 @@ else
     direnv allow
 
     . ${ENV_PATH}/bin/activate
-    pip install ipython
-    # pip install ghstack
-    pip install hypothesis
-    # pip install Pillow
+    uv pip install ipython
+    # uv pip install ghstack
+    uv pip install hypothesis
+    # uv pip install Pillow
     # Warning: numpy won't find OpenBLAS here
-    pip install -r requirements.txt
+    uv pip install -r requirements.txt
     if [ "${PY_VERSION}" == "2.7" ]; then
-        pip install future
+        uv pip install future
     fi
-    pip install ninja
+    uv pip install ninja
 
     # Preserve user BUILD_CONFIG if any
     if [ -z "$BUILD_CONFIG" ]; then
