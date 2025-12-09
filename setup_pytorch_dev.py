@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run
+#!/usr/bin/env -S uv run --python python3.11
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
@@ -60,13 +60,32 @@ def setup_python(version, no_gil):
     if no_gil and not version.startswith(('3.13', '3.14', '3.15')):
         raise click.BadParameter("--no-gil requires Python 3.13+")
 
-    # Install if needed
-    if version not in run(['uv', 'python', 'list'], capture=True, silent=True):
-        with console.status(f"Installing Python {version}..."):
-            run(['uv', 'python', 'install', version])
+    # Ensure uv has this Python version installed (not just system Python)
+    python_spec = f"{version}t" if no_gil else version
+
+    with console.status(f"Ensuring Python {python_spec} is available..."):
+        # Install the Python version via uv (this ensures a managed version, not system)
+        run(['uv', 'python', 'install', python_spec], silent=True)
+
+    # Verify it's installed and get the full version
+    python_list = run(['uv', 'python', 'list'], capture=True, silent=True)
+
+    # Find the uv-managed Python (not system ones)
+    managed_python = None
+    for line in python_list.split('\n'):
+        if python_spec in line and '.local/share/uv/python/' in line:
+            managed_python = line.split()[0]  # Get the full cpython-X.Y.Z specification
+            break
+
+    if not managed_python:
+        # Fallback: just use the version spec and hope for the best
+        console.print(f"[yellow]Warning: Using version spec {python_spec}, may use system Python[/yellow]")
+        managed_python = python_spec
+    else:
+        console.print(f"✓ Using managed Python: {managed_python}", style="dim")
 
     console.print(f"✓ Python {version} ready", style="green")
-    return f"{version}t" if no_gil else version
+    return managed_python
 
 def create_venv(target_dir, python_spec, dry_run):
     """Create virtual environment."""
@@ -132,7 +151,7 @@ def install_source(target_dir, cuda, personal_remote, remote_name, dry_run):
         with console.status("Updating reference repository..."):
             if not dry_run:
                 run(['git', 'pull'], cwd=reference_repo, silent=True)
-                run(['git', 'submodule', 'update', '--init', '--recursive', '--remote'],
+                run(['git', 'submodule', 'update', '--init', '--recursive'],
                     cwd=reference_repo, silent=True)
                 # Ensure git maintenance is enabled
                 run(['git', 'maintenance', 'start'], cwd=reference_repo, silent=True)
