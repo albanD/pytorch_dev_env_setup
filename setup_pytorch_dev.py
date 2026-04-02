@@ -48,6 +48,7 @@ def check_prerequisites():
 def handle_directory(target_dir, force):
     """Handle target directory creation/cleanup."""
     if target_dir.exists() and list(target_dir.iterdir()):
+        console.print(f"{target_dir}")
         console.print(f"[yellow]Directory exists with {len(list(target_dir.iterdir()))} items[/yellow]")
         if not force and not Confirm.ask("Delete contents?", default=False):
             raise click.Abort()
