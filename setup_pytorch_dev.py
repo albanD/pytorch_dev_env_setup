@@ -188,7 +188,7 @@ def install_source(target_dir, cuda, personal_remote, remote_name, dry_run):
         if not dry_run:
             run(['uv', 'pip', 'install', '-r', str(pytorch_dir / 'requirements.txt')],
                 env={'VIRTUAL_ENV': venv})
-            run(['uv', 'pip', 'install', 'ipython', 'hypothesis', 'ninja', 'pytest'],
+            run(['uv', 'pip', 'install', 'cmake', 'ipython', 'hypothesis', 'ninja', 'pytest'],
                 env={'VIRTUAL_ENV': venv})
 
     # Build
@@ -244,6 +244,16 @@ def install_source(target_dir, cuda, personal_remote, remote_name, dry_run):
                     if '=' in part and not part.startswith("'") and not part.startswith('"'):
                         key, value = part.split('=', 1)
                         build_env[key] = value.strip("'\"")
+
+            # Override USE_CUDA based on --cuda argument
+            if cuda != 'cpu':
+                build_env['USE_CUDA'] = '1'
+            else:
+                build_env['USE_CUDA'] = '0'
+
+            # Ensure venv bin is on PATH so cmake/ninja installed there are found
+            venv_bin = str(target_dir / '.venv' / 'bin')
+            build_env['PATH'] = venv_bin + ':' + build_env.get('PATH', '')
 
             # Print build environment
             console.print("\n[cyan]Build environment:[/cyan]")
