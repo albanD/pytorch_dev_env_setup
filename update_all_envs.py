@@ -74,6 +74,7 @@ def update_source_env(repo, cuda, dry_run):
         git(['pull', '--ff-only', 'origin', 'main'], cwd=repo, capture=True)
         git(['submodule', 'update', '--init', '--recursive'], cwd=repo)
 
+    console.print("  cleaning previous build...", style="dim")
     console.print(
         f"  building ({'cuda' if cuda else 'cpu'})...", style="dim")
     if dry_run:
@@ -81,12 +82,23 @@ def update_source_env(repo, cuda, dry_run):
 
     venv = repo.parent / '.venv'
     build = "USE_CUDA=1 " if cuda else ""
-    # Build through an interactive bash so the BUILD_CONFIG alias resolves.
+    # Clean then build through an interactive bash so the BUILD_CONFIG alias
+    # resolves. ccache keeps the rebuild fast despite the clean.
     cmd = (f"source {venv}/bin/activate && "
+           f"python setup.py clean && "
            f"BUILD_CONFIG {build}pip install -e . -v --no-build-isolation")
     res = subprocess.run(['bash', '-ic', cmd], cwd=repo)
     if res.returncode != 0:
         raise RuntimeError("build failed")
+
+
+def update_reference(reference, dry_run):
+    """Refresh the shared reference clone the envs are cloned against."""
+    console.print("  pulling + updating submodules", style="dim")
+    if dry_run:
+        return
+    git(['pull'], cwd=reference, capture=True)
+    git(['submodule', 'update', '--init', '--recursive'], cwd=reference)
 
 
 def update_binary_env(env, cuda, dry_run):
@@ -123,6 +135,18 @@ def main(base, dry_run):
 
     console.print(f"\n[bold cyan]Updating {len(envs)} env(s) in {base}"
                   f"[/bold cyan]\n")
+
+    # Refresh the shared reference clone first so every env clones/pulls
+    # against up-to-date objects.
+    reference = base / 'reference'
+    if (reference / '.git').exists():
+        console.rule("[magenta]reference[/magenta]")
+        try:
+            update_reference(reference, dry_run)
+            console.print("  ✓ done", style="green")
+        except Exception as e:
+            console.print(f"  [red]✗ {e}[/red]")
+            raise click.ClickException(f"reference update failed: {e}")
 
     results = []
     for env in envs:
