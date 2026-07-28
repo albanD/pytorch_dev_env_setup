@@ -85,8 +85,9 @@ def update_source_env(repo, cuda, dry_run):
     # Clean then build through an interactive bash so the BUILD_CONFIG alias
     # resolves. ccache keeps the rebuild fast despite the clean.
     cmd = (f"source {venv}/bin/activate && "
-           f"python setup.py clean && "
-           f"BUILD_CONFIG {build}pip install -e . -v --no-build-isolation")
+           f"uv pip install -r requirements-build.txt && "
+           f"spin clean && "
+           f"BUILD_CONFIG {build}spin develop")
     res = subprocess.run(['bash', '-ic', cmd], cwd=repo)
     if res.returncode != 0:
         raise RuntimeError("build failed")
